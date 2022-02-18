@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+AutoUpdate-Show-In-Client: false
+OpenIDE-Module: org.netbeans.modules.custom.fmt
+OpenIDE-Module-Implementation-Version: 2
+Main-Class: org.netbeans.modules.custom.fmt.Main
+Class-Path: libs/org-netbeans-libs-javacup.jar libs/org-netbeans-libs-javafx.jar

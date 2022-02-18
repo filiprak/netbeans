@@ -1,4 +1,4 @@
-package org.netbeans.modules.php.fmt;
+package org.netbeans.modules.custom.fmt;
 
 import java.io.IOException;
 import java.io.OutputStream;

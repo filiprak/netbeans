@@ -1,4 +1,4 @@
-package org.netbeans.modules.php.fmt;
+package org.netbeans.modules.custom.fmt;
 
 import org.netbeans.modules.csl.core.GsfParserFactory;
 import org.netbeans.modules.editor.indent.spi.CodeStylePreferences;
@@ -21,7 +21,7 @@ public final class MimeLookupCache extends MimeLookupCacheSPI {
     public MimeLookupCache() {
         super();
 
-        content.add(new org.netbeans.modules.php.fmt.PHPCodeStylePreferences());
+        content.add(new org.netbeans.modules.custom.fmt.PHPCodeStylePreferences());
         content.add(new org.netbeans.modules.csl.core.GsfIndentTaskFactory());
     }
 

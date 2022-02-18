@@ -1,4 +1,4 @@
-package org.netbeans.modules.php.fmt;
+package org.netbeans.modules.custom.fmt;
 
 import javax.swing.text.*;
 
@@ -87,7 +87,7 @@ class Main {
             Symbol root = parser.parse();
             PHPParseResult compilationInfo = new PHPParseResult(null, (Program) root.value);
 
-            org.netbeans.modules.php.fmt.MimeLookupCache.add(new ReformatTask.Factory() {
+            org.netbeans.modules.custom.fmt.MimeLookupCache.add(new ReformatTask.Factory() {
                 public ReformatTask createTask(Context context) {
                     final Context ctx = context;
                     return new ReformatTask() {
@@ -105,7 +105,7 @@ class Main {
                 }
             });
 
-            org.netbeans.modules.php.fmt.MimeLookupCache.add(new IndentTask.Factory() {
+            org.netbeans.modules.custom.fmt.MimeLookupCache.add(new IndentTask.Factory() {
                 public IndentTask createTask(Context context) {
                     final Context ctx = context;
                     return new IndentTask() {
