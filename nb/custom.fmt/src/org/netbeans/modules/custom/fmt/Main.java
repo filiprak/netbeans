@@ -15,18 +15,19 @@ import org.netbeans.modules.editor.indent.spi.Context;
 import org.netbeans.modules.php.editor.parser.ParserErrorHandler;
 import org.netbeans.modules.php.editor.lexer.PHPTokenId;
 import org.netbeans.api.lexer.Language;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.*;
-import org.apache.commons.cli.*;
 import java_cup.runtime.Symbol;
 import java_cup.runtime.Scanner;
-
 import java.io.StringReader;
+import org.netbeans.modules.custom.fmt.CliOptions;
+import org.apache.commons.cli.*;
 
 
 class Main {
-    public static String readFile(String path) throws IOException {
-        return Files.readString(Paths.get(path));
+    public byte[] readFile(String path) throws IOException {
+        Path p = Paths.get(path);
+        return Files.readAllBytes(p);
     }
 
     public static BaseDocument getDocument(String text) {
@@ -100,32 +101,10 @@ class Main {
         return doc.getText(0, doc.getLength());
     }
 
-    public static void main(String[] args) throws BadLocationException {
-        System.out.println("Starting formatter -----------------\n");
+    public static void main(String[] args) throws BadLocationException, IOException {
+        CliOptions.init(args);
 
-        Options options = new Options();
-
-        Option input = new Option("i", "input", true, "input file path");
-        input.setRequired(true);
-        options.addOption(input);
-
-        Option output = new Option("o", "output", true, "output file");
-        output.setRequired(true);
-        options.addOption(output);
-
-        CommandLineParser parser = new DefaultParser();
-        HelpFormatter formatter = new HelpFormatter();
-        CommandLine cmd = null;//not a good practice, it serves it purpose
-
-        try {
-            cmd = parser.parse(options, args);
-
-        } catch (ParseException e) {
-            System.out.println(e.getMessage());
-            formatter.printHelp("utility-name", options);
-
-            System.exit(1);
-        }
+        String file = CliOptions.getInputFileContent();
 
         //String doc1 = "<?php\n\nfunction test() \n\n\n{$z=1;$c=66;}\n\n\n\n$test   = \n\n  [\n1,2,3\n] ;\n\n";
 
