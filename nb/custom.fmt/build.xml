@@ -8,6 +8,7 @@
         <jar destfile="build/bin/fmt.jar" manifest="manifest.mf">
 
             <zipgroupfileset dir="../../nbbuild/build/public-package-jars" includes="org-netbeans-libs-javacup.jar" />
+            <zipgroupfileset dir="external" includes="**/*.jar" />
 
             <fileset dir="../../platform/openide.filesystems/build/classes"/>
             <fileset dir="../../platform/openide.util/build/classes"/>
