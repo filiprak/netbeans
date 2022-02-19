@@ -6,9 +6,9 @@
     <target name="build" depends="projectized.build">
         <echo message="Building fmt jar file"/>
         <jar destfile="build/bin/fmt.jar" manifest="manifest.mf">
+
             <zipgroupfileset dir="../../nbbuild/build/public-package-jars" includes="org-netbeans-libs-javacup.jar" />
 
-            <fileset dir="../../php/libs.javacup/build/classes"/>
             <fileset dir="../../platform/openide.filesystems/build/classes"/>
             <fileset dir="../../platform/openide.util/build/classes"/>
             <fileset dir="../../platform/openide.util.lookup/build/classes"/>
@@ -34,7 +34,9 @@
             <fileset dir="../../php/php.api.editor/build/classes"/>
             <fileset dir="../../php/php.project/build/classes"/>
             <fileset dir="../../php/php.api.annotation/build/classes"/>
+
             <fileset dir="build/classes"/>
+
         </jar>
     </target>
 

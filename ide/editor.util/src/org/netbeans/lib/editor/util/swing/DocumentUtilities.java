@@ -472,6 +472,10 @@ public final class DocumentUtilities {
      */
     public static boolean isReadLocked(Document doc) {
         if (checkAbstractDoc(doc)) {
+            if (doc.getProperty("skipLockCheck") != null) {
+                return true;
+            }
+
             if (isWriteLocked(doc)) {
                 return true;
             }
@@ -512,6 +516,9 @@ public final class DocumentUtilities {
      * @since 1.17
      */
     public static boolean isWriteLocked(Document doc) {
+        if (doc.getProperty("skipLockCheck") != null) {
+            return true;
+        }
         if (checkAbstractDoc(doc)) {
             Field f = currWriterField;
             if (f == null) {

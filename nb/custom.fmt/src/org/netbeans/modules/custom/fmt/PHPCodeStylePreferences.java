@@ -1,12 +1,10 @@
 package org.netbeans.modules.custom.fmt;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.prefs.*;
 
 import static org.netbeans.modules.php.editor.indent.FmtOptions.*;
+
 
 public class PHPCodeStylePreferences extends AbstractPreferences {
     private final HashMap<String, String> prefs = new HashMap<>();

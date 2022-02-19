@@ -1,16 +1,11 @@
 package org.netbeans.modules.custom.fmt;
 
-import org.netbeans.modules.csl.core.GsfParserFactory;
-import org.netbeans.modules.editor.indent.spi.CodeStylePreferences;
 import org.netbeans.modules.editor.mimelookup.MimeLookupCacheSPI;
 import org.netbeans.api.editor.mimelookup.MimePath;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.Lookup;
-import org.openide.util.lookup.Lookups;
 import org.openide.util.lookup.InstanceContent;
-
-import java.net.URL;
 
 
 @ServiceProvider(service = MimeLookupCacheSPI.class)

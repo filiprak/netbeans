@@ -4,78 +4,49 @@ import javax.swing.text.*;
 
 import org.netbeans.modules.editor.indent.api.Reformat;
 import org.netbeans.editor.BaseDocument;
-import org.netbeans.modules.editor.indent.spi.*;
-import org.netbeans.modules.php.editor.indent.*;
+import org.netbeans.modules.editor.indent.spi.ReformatTask;
+import org.netbeans.modules.editor.indent.spi.ExtraLock;
 import org.netbeans.modules.php.editor.indent.PHPFormatter;
 import org.netbeans.modules.php.editor.parser.ASTPHP5Parser;
 import org.netbeans.modules.php.editor.parser.ASTPHP5Scanner;
 import org.netbeans.modules.php.editor.parser.astnodes.Program;
 import org.netbeans.modules.php.editor.parser.PHPParseResult;
 import org.netbeans.modules.editor.indent.spi.Context;
-import org.netbeans.modules.editor.settings.storage.StorageImpl;
-import org.netbeans.modules.editor.settings.storage.spi.TypedValue;
-import org.netbeans.modules.editor.settings.storage.preferences.PreferencesStorage;
-import org.netbeans.modules.editor.settings.storage.api.EditorSettingsStorage;
-import org.netbeans.api.editor.mimelookup.MimePath;
+import org.netbeans.modules.php.editor.parser.ParserErrorHandler;
+import org.netbeans.modules.php.editor.lexer.PHPTokenId;
+import org.netbeans.api.lexer.Language;
 import java_cup.runtime.Symbol;
+import java_cup.runtime.Scanner;
 
-import java.io.IOException;
 import java.io.StringReader;
-import java.util.HashMap;
-import java.util.Map;
 
 
 class Main {
-    public static BaseDocument getDocument() {
+    public static BaseDocument getDocument(String text) {
         BaseDocument doc = new BaseDocument(false, "text/x-php5");
 
         try {
-            doc.putProperty(org.netbeans.api.lexer.Language.class, org.netbeans.modules.php.editor.lexer.PHPTokenId.language());
-            doc.insertString(0, "<?php\n\nfunction test() \n\n\n{$z=1;$c=66;}\n\n\n\n$test   = \n\n  [\n1,2,3\n] ;\n\n", null);
+            doc.putProperty(Language.class, PHPTokenId.language());
+            doc.putProperty("skipLockCheck", true);
+            doc.insertString(0, text, null);
 
-        } catch (Exception e) {
+        } catch (BadLocationException e) {
             e.printStackTrace();
         }
 
         return doc;
     }
 
-//    public static Map<String, TypedValue> loadPreferences() throws IOException {
-//        //StorageImpl<String, TypedValue> storage = new StorageImpl<>(new PreferencesStorage(), null);
-//        EditorSettingsStorage<String, TypedValue> storage1 = EditorSettingsStorage.get("Preferences");
-//
-//        Map<String, TypedValue> map2 = new HashMap<>();
-//        map2.put("tab-size", new TypedValue("77", Integer.class.getName()));
-//        map2.put("yyy", new TypedValue("88", Integer.class.getName()));
-//        storage1.save(MimePath.get("text/x-php5"), null, false, map2);
-//
-//        EditorSettingsStorage<String, TypedValue> storage = EditorSettingsStorage.get("Preferences");
-//        Map<String, TypedValue> map = storage.load(MimePath.get("text/x-php5"), null, false);
-//
-//        System.out.println("\nLoaded preferences: ---------");
-//
-//        map.forEach((s, typedValue) -> {
-//            System.out.print(s + ": ");
-//            System.out.println(typedValue);
-//        });
-//
-//        System.out.println("\n---------\n\n");
-//
-//        return map;
-//    }
+    public static String reformatString(String text) throws BadLocationException {
+        BaseDocument doc = getDocument(text);
 
-    public static void main(String[] args) throws BadLocationException {
-        System.out.println("Starting formatter");
-
-        BaseDocument doc = getDocument();
-
-        System.out.println("Doc:\n\n" + doc.getText(0, doc.getLength()));
+        System.out.println("--- Start Doc Format:\n\n" + doc.getText(0, doc.getLength()));
 
         // calling the php ast parser itself
         ASTPHP5Scanner scanner = new ASTPHP5Scanner(new StringReader(doc.getText(0, doc.getLength())), true, true);
-        ASTPHP5Parser parser = new ASTPHP5Parser(scanner);
+        ASTPHP5Parser parser = new ASTPHP5Parser((Scanner) scanner);
 
-        parser.setErrorHandler(new org.netbeans.modules.php.editor.parser.ParserErrorHandler() {
+        parser.setErrorHandler(new ParserErrorHandler() {
             @Override
             public void handleError(Type type, short[] expectedTokens, Symbol current, Symbol previous) {
                 System.out.println("Parsing error: " + type.toString());
@@ -87,33 +58,14 @@ class Main {
             Symbol root = parser.parse();
             PHPParseResult compilationInfo = new PHPParseResult(null, (Program) root.value);
 
-            org.netbeans.modules.custom.fmt.MimeLookupCache.add(new ReformatTask.Factory() {
+            MimeLookupCache.add(new ReformatTask.Factory() {
                 public ReformatTask createTask(Context context) {
-                    final Context ctx = context;
                     return new ReformatTask() {
                         public void reformat() throws BadLocationException {
-                            formatter.reformat(ctx, compilationInfo);
-                            //formatter.reindent(ctx);
-
-                            System.out.println("Doc formatted:\n\n" + ctx.document().getText(0, ctx.document().getLength()));
+                            formatter.reformat(context, compilationInfo);
                         }
 
                         public ExtraLock reformatLock() {
-                            return null;
-                        }
-                    };
-                }
-            });
-
-            org.netbeans.modules.custom.fmt.MimeLookupCache.add(new IndentTask.Factory() {
-                public IndentTask createTask(Context context) {
-                    final Context ctx = context;
-                    return new IndentTask() {
-                        public void reindent() throws BadLocationException {
-                            formatter.reindent(ctx);
-                        }
-
-                        public ExtraLock indentLock() {
                             return null;
                         }
                     };
@@ -125,16 +77,12 @@ class Main {
             fmt.lock();
 
             try {
-                doc.atomicLock();
-                try {
-                    fmt.reformat(0, doc.getLength());
-
-                } finally {
-                    doc.atomicUnlock();
-                }
+                fmt.reformat(0, doc.getLength());
             } finally {
                 fmt.unlock();
             }
+
+            System.out.println("--- Doc formatted:\n\n" + doc.getText(0, doc.getLength()));
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -142,5 +90,26 @@ class Main {
             e.printStackTrace();
         }
 
+        return doc.getText(0, doc.getLength());
+    }
+
+    public static void main(String[] args) throws BadLocationException {
+        System.out.println("Starting formatter -----------------\n");
+
+        String doc1 = "<?php\n\nfunction test() \n\n\n{$z=1;$c=66;}\n\n\n\n$test   = \n\n  [\n1,2,3\n] ;\n\n";
+
+        String doc2 = "<?php\n" +
+                "\n" +
+                "function test() {\n" +
+                "$z = 1;\n" +
+                "  $c = 66;\n" +
+                "  }\n" +
+                "\n" +
+                "  $test = [\n" +
+                " 1, 2, 3\n" +
+                "];\n";
+
+        reformatString(doc1);
+        reformatString(doc2);
     }
 }

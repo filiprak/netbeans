@@ -10,7 +10,7 @@ import org.netbeans.modules.php.editor.lexer.PHPTokenId;
 import org.netbeans.modules.php.editor.parser.GSFPHPParser;
 
 
-@LanguageRegistration(mimeType="text/x-php5", useMultiview=true)
+@LanguageRegistration(mimeType = "text/x-php5", useMultiview = true)
 public class PHPLanguageFmt extends DefaultLanguageConfig {
 
     public static final String LINE_COMMENT_PREFIX = "//"; // NOI18N
