@@ -102,6 +102,8 @@ public class PHPCodeFormatter extends Formatter {
                     int realStart = start > 0 ? Math.min(start, doc.getLength()) : 0;
                     int realEnd = end > 0 ? Math.max(realStart, Math.min(doc.getLength(), end)) : doc.getLength();
 
+                    System.out.printf("Formatting document[%d - %d]: in range: [%d - %d]\n\n", 0, doc.getLength(), realStart, realEnd);
+
                     fmt.reformat(realStart, realEnd);
                 } finally {
                     fmt.unlock();

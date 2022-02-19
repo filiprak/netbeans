@@ -11,11 +11,13 @@ class Main {
         try {
             String text = CliOptions.getInputFileContent();
 
-            Formatter fmt = RegisteredFormatters.get(CliOptions.getMimeType());
+            if (!text.equals("")) {
+                Formatter fmt = RegisteredFormatters.get(CliOptions.getMimeType());
 
-            String reformatted = fmt.reformat(text, CliOptions.getStartOffset(), CliOptions.getEndOffset());
+                String reformatted = fmt.reformat(text, CliOptions.getStartOffset(), CliOptions.getEndOffset());
 
-            System.out.println(reformatted);
+                System.out.println(reformatted);
+            }
 
         } catch (FormatterException ex) {
             ex.printStackTrace();

@@ -60,7 +60,7 @@ public final class CliOptions {
     }
 
     private static int getIntOption(String arg, int def) {
-        if (!cmd.hasOption(arg)) {
+        if (cmd.hasOption(arg)) {
             try {
                 return Integer.parseInt(cmd.getOptionValue(arg));
             } catch (NumberFormatException ex) {
@@ -71,16 +71,16 @@ public final class CliOptions {
         }
     }
 
-    public static int getStartOffset() {
-        return getIntOption(Args.START_OFFSET, 0);
-    }
-
     public static String getMimeType() {
         if (cmd.hasOption(Args.MIME)) {
-            return cmd.getOptionValue(Args.MIME, detectedMime != null ? detectedMime : Mime.PHP);
+            return cmd.getOptionValue(Args.MIME, Mime.PHP);
         } else {
             return detectedMime != null ? detectedMime : Mime.PHP;
         }
+    }
+
+    public static int getStartOffset() {
+        return getIntOption(Args.START_OFFSET, 0);
     }
 
     public static int getEndOffset() {
