@@ -1,16 +1,12 @@
 package org.netbeans.modules.custom.fmt;
 
-import org.netbeans.modules.custom.fmt.formatters.Formatter;
 import org.netbeans.modules.custom.fmt.formatters.RegisteredFormatters;
-import org.netbeans.modules.custom.fmt.formatters.php.PHPCodeStylePreferences;
-import org.netbeans.modules.custom.fmt.formatters.php.PHPFormatter;
 import org.netbeans.modules.editor.mimelookup.MimeLookupCacheSPI;
 import org.netbeans.api.editor.mimelookup.MimePath;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.Lookups;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.Lookup;
-import org.openide.util.lookup.InstanceContent;
 
 import java.util.HashMap;
 
@@ -22,8 +18,6 @@ public final class MimeLookupCache extends MimeLookupCacheSPI {
 
     public MimeLookupCache() {
         super();
-
-        System.out.println("init mime cache");
 
         RegisteredFormatters.each((mimeType, fmtInstance) -> {
             contentByMime.put(mimeType, new AbstractLookup(fmtInstance.getMimeLookupContent()));

@@ -1,31 +1,25 @@
 package org.netbeans.modules.custom.fmt;
 
 import java.io.IOException;
-import java.lang.ref.Reference;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.Callable;
 import javax.swing.text.Document;
 
-import org.netbeans.editor.BaseDocument;
 import org.netbeans.modules.parsing.implspi.EnvironmentFactory;
 import org.netbeans.modules.parsing.implspi.SchedulerControl;
 import org.netbeans.modules.parsing.implspi.SourceControl;
 import org.netbeans.modules.parsing.implspi.SourceEnvironment;
 import org.netbeans.modules.parsing.spi.Parser;
 import org.netbeans.modules.parsing.spi.Scheduler;
-import org.netbeans.modules.php.editor.parser.GSFPHPParser;
 import org.openide.filesystems.FileObject;
 import org.openide.util.Lookup;
 import org.netbeans.modules.parsing.api.Source;
+import org.openide.util.NotImplementedException;
 import org.openide.util.lookup.ServiceProvider;
 
 
 @ServiceProvider(service = EnvironmentFactory.class, position = 50000)
-public class FmtEnvironmentFactory implements EnvironmentFactory {
-    private static Map<String, Reference<Parser>> cachedParsers = new HashMap<String, Reference<Parser>>();
-
+public class DefaultEnvironmentFactory implements EnvironmentFactory {
     @Override
     public Class<? extends Scheduler> findStandardScheduler(String schedulerName) {
         return null;
@@ -33,7 +27,7 @@ public class FmtEnvironmentFactory implements EnvironmentFactory {
 
     @Override
     public SourceEnvironment createEnvironment(Source src, SourceControl control) {
-        return new FmtEnvironmentFactory.Env(control);
+        return new DefaultEnvironmentFactory.Env(control);
     }
 
     @Override
@@ -48,7 +42,7 @@ public class FmtEnvironmentFactory implements EnvironmentFactory {
 
     @Override
     public synchronized Parser findMimeParser(Lookup context, String mimeType) {
-        return new GSFPHPParser();
+        return null;
     }
 
     @Override
@@ -74,13 +68,12 @@ public class FmtEnvironmentFactory implements EnvironmentFactory {
 
         @Override
         public void attachScheduler(SchedulerControl s, boolean attach) {
-            // FIXME - schedulers will not react if the source file changes
-            // because of rename etc.
+            throw new NotImplementedException();
         }
 
         @Override
         public void activate() {
-
+            throw new NotImplementedException();
         }
     }
 }

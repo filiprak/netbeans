@@ -6,9 +6,10 @@ public abstract class Formatter {
 
     protected static final InstanceContent lookupContent = new InstanceContent();
 
-    public abstract String reformat(String text);
+    public abstract String reformat(String text, int start, int end) throws FormatterException;
 
     public InstanceContent getMimeLookupContent() {
         return lookupContent;
     }
+
 }

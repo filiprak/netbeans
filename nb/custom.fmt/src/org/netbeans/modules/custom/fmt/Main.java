@@ -1,6 +1,7 @@
 package org.netbeans.modules.custom.fmt;
 
 import org.netbeans.modules.custom.fmt.formatters.Formatter;
+import org.netbeans.modules.custom.fmt.formatters.FormatterException;
 import org.netbeans.modules.custom.fmt.formatters.RegisteredFormatters;
 
 class Main {
@@ -8,13 +9,15 @@ class Main {
         CliOptions.init(args);
 
         try {
-            String file = CliOptions.getInputFileContent();
+            String text = CliOptions.getInputFileContent();
 
             Formatter fmt = RegisteredFormatters.get(CliOptions.getMimeType());
 
-            System.out.println(fmt.reformat(file));
+            String reformatted = fmt.reformat(text, CliOptions.getStartOffset(), CliOptions.getEndOffset());
 
-        } catch (Exception ex) {
+            System.out.println(reformatted);
+
+        } catch (FormatterException ex) {
             ex.printStackTrace();
             System.exit(1);
         }
