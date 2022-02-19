@@ -14,13 +14,13 @@ import java.util.HashMap;
 @ServiceProvider(service = MimeLookupCacheSPI.class)
 public final class MimeLookupCache extends MimeLookupCacheSPI {
 
-    private static final HashMap<String, Lookup> contentByMime = new HashMap<>();
+    private static final HashMap<String, Lookup> lookupByMime = new HashMap<>();
 
     public MimeLookupCache() {
         super();
 
         RegisteredFormatters.each((mimeType, fmtInstance) -> {
-            contentByMime.put(mimeType, new AbstractLookup(fmtInstance.getMimeLookupContent()));
+            lookupByMime.put(mimeType, new AbstractLookup(fmtInstance.getMimeLookupContent()));
         });
     }
 
@@ -28,8 +28,8 @@ public final class MimeLookupCache extends MimeLookupCacheSPI {
     public synchronized Lookup getLookup(MimePath mp) {
         String mimeType = mp.getMimeType(0);
 
-        if (contentByMime.containsKey(mimeType)) {
-            return contentByMime.get(mimeType);
+        if (lookupByMime.containsKey(mimeType)) {
+            return lookupByMime.get(mimeType);
         } else {
             return Lookups.fixed();
         }
