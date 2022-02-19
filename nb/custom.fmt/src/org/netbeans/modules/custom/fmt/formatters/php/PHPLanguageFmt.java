@@ -1,4 +1,4 @@
-package org.netbeans.modules.custom.fmt;
+package org.netbeans.modules.custom.fmt.formatters.php;
 
 import org.netbeans.api.lexer.Language;
 import org.netbeans.modules.csl.api.Formatter;

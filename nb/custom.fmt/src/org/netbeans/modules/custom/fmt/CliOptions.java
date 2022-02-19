@@ -10,19 +10,20 @@ import java.nio.file.Paths;
 
 public final class CliOptions {
 
-    public static class Lang {
-        public static String PHP = "php";
+    public static final class Mime {
+        public final static String PHP = "text/x-php5";
     }
 
-    public static class Args {
-        public static String START_OFFSET = "s";
-        public static String START_OFFSET_L = "start-offset";
-        public static String END_OFFSET = "e";
-        public static String END_OFFSET_L = "end-offset";
-        public static String TYPE = "t";
-        public static String TYPE_L = "type";
+    public static final class Args {
+        public static final String START_OFFSET = "s";
+        public static final String START_OFFSET_L = "start-offset";
+        public static final String END_OFFSET = "e";
+        public static final String END_OFFSET_L = "end-offset";
+        public static final String MIME = "m";
+        public static final String MIME_L = "mime-type";
     }
 
+    private static String detectedMime;
     private static CommandLine cmd;
 
 
@@ -37,7 +38,7 @@ public final class CliOptions {
         output.setRequired(false);
         options.addOption(output);
 
-        Option type = new Option(Args.TYPE, Args.TYPE_L, true, "File language type (default: 'php')");
+        Option type = new Option(Args.MIME, Args.MIME_L, true, "File mime type (default: 'text/x-php5')");
         type.setRequired(false);
         options.addOption(type);
 
@@ -74,11 +75,11 @@ public final class CliOptions {
         return getIntOption(Args.START_OFFSET, 0);
     }
 
-    public static String getLanguageType() {
-        if (cmd.hasOption(Args.TYPE)) {
-            return cmd.getOptionValue(Args.TYPE, Lang.PHP);
+    public static String getMimeType() {
+        if (cmd.hasOption(Args.MIME)) {
+            return cmd.getOptionValue(Args.MIME, detectedMime != null ? detectedMime : Mime.PHP);
         } else {
-            return Lang.PHP;
+            return detectedMime != null ? detectedMime : Mime.PHP;
         }
     }
 
@@ -97,7 +98,11 @@ public final class CliOptions {
     public static String getInputFileContent() {
         try {
             if (getInputFilename() != null) {
-                return new String(Files.readAllBytes(Paths.get(getInputFilename())));
+                Path path = Paths.get(getInputFilename());
+
+                detectedMime = Files.probeContentType(path);
+
+                return new String(Files.readAllBytes(path));
             } else {
                 throw new IOException("File name is empty");
             }
