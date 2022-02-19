@@ -12,11 +12,11 @@ public class PHPCodeStylePreferences extends AbstractPreferences {
     public PHPCodeStylePreferences() {
         super(null, "");
 
-        prefs.put(EXPAND_TAB_TO_SPACES, "true");
-        prefs.put(TAB_SIZE, "2");
-        prefs.put(INDENT_SIZE, "7");
-        prefs.put(CONTINUATION_INDENT_SIZE, "2");
-        prefs.put(ALIGN_MULTILINE_ARRAY_INIT, "true");
+//        prefs.put(EXPAND_TAB_TO_SPACES, "true");
+//        prefs.put(TAB_SIZE, "2");
+//        prefs.put(INDENT_SIZE, "7");
+//        prefs.put(CONTINUATION_INDENT_SIZE, "2");
+//        prefs.put(ALIGN_MULTILINE_ARRAY_INIT, "true");
     }
 
 

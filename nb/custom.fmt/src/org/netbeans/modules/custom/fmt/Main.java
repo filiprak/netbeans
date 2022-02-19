@@ -98,16 +98,16 @@ class Main {
 
         String doc1 = "<?php\n\nfunction test() \n\n\n{$z=1;$c=66;}\n\n\n\n$test   = \n\n  [\n1,2,3\n] ;\n\n";
 
-        String doc2 = "<?php\n" +
-                "\n" +
-                "function test() {\n" +
-                "$z = 1;\n" +
-                "  $c = 66;\n" +
-                "  }\n" +
-                "\n" +
-                "  $test = [\n" +
-                " 1, 2, 3\n" +
-                "];\n";
+        String doc2 = "<?php\r\n" +
+                "\r\n" +
+                "function test() {\r\n" +
+                "$z = 1;\r\n" +
+                "  $c = 66;\r\n" +
+                "  }\r\n" +
+                "\r\n" +
+                "  $test = [\r\n" +
+                " 1, 2, 3\r\n" +
+                "];\r\n";
 
         reformatString(doc1);
         reformatString(doc2);
