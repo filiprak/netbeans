@@ -5,7 +5,7 @@
 
     <target name="build" depends="projectized.build">
         <echo message="Building fmt jar file"/>
-        <jar destfile="build/bin/fmt.jar" manifest="manifest.mf">
+        <jar destfile="build/bin/nb-fmt.jar" manifest="manifest.mf">
 
             <zipgroupfileset dir="../../nbbuild/build/public-package-jars" includes="org-netbeans-libs-javacup.jar" />
             <zipgroupfileset dir="external" includes="**/*.jar" />
