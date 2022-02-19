@@ -1,6 +1,7 @@
 package org.netbeans.modules.custom.fmt;
 
 import org.apache.commons.cli.*;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,6 +22,8 @@ public final class CliOptions {
         public static final String END_OFFSET_L = "end-offset";
         public static final String MIME = "m";
         public static final String MIME_L = "mime-type";
+        public static final String CONFIG = "c";
+        public static final String CONFIG_L = "config";
     }
 
     private static String detectedMime;
@@ -41,6 +44,10 @@ public final class CliOptions {
         Option type = new Option(Args.MIME, Args.MIME_L, true, "File mime type (default: 'text/x-php5')");
         type.setRequired(false);
         options.addOption(type);
+
+        Option config = new Option(Args.CONFIG, Args.CONFIG_L, true, "Formatter config json string");
+        config.setRequired(false);
+        options.addOption(config);
 
         CommandLineParser parser = new DefaultParser();
 
@@ -90,6 +97,14 @@ public final class CliOptions {
     public static String getInputFilename() {
         if (!cmd.getArgList().isEmpty()) {
             return cmd.getArgList().get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public static JSONObject getConfigJson() {
+        if (cmd.hasOption(Args.CONFIG)) {
+            return new JSONObject(cmd.getOptionValue(Args.CONFIG));
         } else {
             return null;
         }

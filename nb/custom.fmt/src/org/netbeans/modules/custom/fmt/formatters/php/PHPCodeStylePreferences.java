@@ -1,12 +1,17 @@
 package org.netbeans.modules.custom.fmt.formatters.php;
 
-import org.netbeans.api.editor.mimelookup.MimeRegistration;
-import org.netbeans.modules.custom.fmt.CliOptions;
-
 import java.util.HashMap;
+import java.util.Map;
 import java.util.prefs.*;
 
 import static org.netbeans.modules.php.editor.indent.FmtOptions.*;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.netbeans.modules.custom.fmt.CliOptions;
+import org.netbeans.modules.custom.fmt.formatters.FormatterException;
+import org.netbeans.modules.php.editor.indent.FmtOptions;
+
 
 public class PHPCodeStylePreferences extends AbstractPreferences {
     private final HashMap<String, String> prefs = new HashMap<>();
@@ -14,13 +19,29 @@ public class PHPCodeStylePreferences extends AbstractPreferences {
     public PHPCodeStylePreferences() {
         super(null, "");
 
-        prefs.put(EXPAND_TAB_TO_SPACES, "true");
-//        prefs.put(TAB_SIZE, "2");
-//        prefs.put(INDENT_SIZE, "7");
-//        prefs.put(CONTINUATION_INDENT_SIZE, "2");
-//        prefs.put(ALIGN_MULTILINE_ARRAY_INIT, "true");
+        load();
     }
 
+    public void load() {
+        try {
+            JSONObject json = CliOptions.getConfigJson();
+
+            if (json != null) {
+                prefs.clear();
+
+                Map<String, String> defaults = FmtOptions.getDefaults();
+
+                defaults.forEach((name, value) -> {
+                    if (json.has(name)) {
+                        prefs.put(name, json.get(name).toString());
+                    }
+                });
+            }
+        } catch (JSONException ex) {
+            System.out.println("Warning: failed to parse json config, using default config instead");
+            ex.printStackTrace();
+        }
+    }
 
     @Override
     protected void putSpi(String s, String s1) {
