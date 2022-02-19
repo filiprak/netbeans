@@ -21,6 +21,35 @@
 
 <a href="https://foojay.io/today/works-with-openjdk"><img align="right" src="https://github.com/foojayio/badges/raw/main/works_with_openjdk/Works-with-OpenJDK.png" width="100"></a>
 
+# PHP cli formatter fork
+
+Module: `nb/custom.fmt`, cli formatter usage:
+```
+usage: nb-fmt.jar [options] <input-file-path>
+ -c,--config <arg>         Formatter config json string
+ -e,--end-offset <arg>     Formatting end file offset
+ -m,--mime-type <arg>      File mime type (default: 'text/x-php5')
+ -o,--out <arg>            Output file path (default same as input file)
+ -s,--start-offset <arg>   Formatting start file offset
+```
+Example usages:
+- reformat whole file
+```bash
+java -jar nb-fmt.jar test/test.php
+```
+- reformat only part of the file
+```bash
+java -jar nb-fmt.jar test/test.php -s=4 -e=87
+```
+- reformat file using custom formatter config
+```bash
+java -jar nb-fmt.jar test/test.php -c '{"indent-shift-width":4,"tab-size":4}'
+```
+- reformat file and save result to separate file
+```bash
+java -jar nb-fmt.jar test/test.php -o result.php
+```
+
 # Apache NetBeans
 
 Apache NetBeans is an open source development environment, tooling platform, and application framework.
