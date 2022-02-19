@@ -33,6 +33,7 @@
             <fileset dir="../../ide/web.common/build/classes"/>
             <fileset dir="../../php/php.editor/build/classes"/>
             <fileset dir="../../php/php.api.editor/build/classes"/>
+            <fileset dir="../../php/php.api.phpmodule/build/classes"/>
             <fileset dir="../../php/php.project/build/classes"/>
             <fileset dir="../../php/php.api.annotation/build/classes"/>
 
