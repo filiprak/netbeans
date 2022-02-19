@@ -3,6 +3,8 @@ package org.netbeans.modules.custom.fmt;
 import org.apache.commons.cli.*;
 import org.json.JSONObject;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,6 +26,8 @@ public final class CliOptions {
         public static final String MIME_L = "mime-type";
         public static final String CONFIG = "c";
         public static final String CONFIG_L = "config";
+        public static final String OUTPUT = "o";
+        public static final String OUTPUT_L = "out";
     }
 
     private static String detectedMime;
@@ -48,6 +52,10 @@ public final class CliOptions {
         Option config = new Option(Args.CONFIG, Args.CONFIG_L, true, "Formatter config json string");
         config.setRequired(false);
         options.addOption(config);
+
+        Option outFile = new Option(Args.OUTPUT, Args.OUTPUT_L, true, "Output file path (default same as input file)");
+        outFile.setRequired(false);
+        options.addOption(outFile);
 
         CommandLineParser parser = new DefaultParser();
 
@@ -125,6 +133,27 @@ public final class CliOptions {
             System.out.println("Unable to read file: " + ex.getClass().getName() + ": " + ex.getMessage());
             System.exit(1);
             return "";
+        }
+    }
+
+    public static void saveReformattedFile(String formatted) throws IOException {
+        BufferedWriter writer = null;
+
+        try {
+            String outFilename = cmd.getOptionValue(Args.OUTPUT, getInputFilename());
+
+            writer = new BufferedWriter(new FileWriter(outFilename));
+            writer.write(formatted);
+
+            writer.close();
+
+        } catch (Exception ex) {
+            System.out.println("Unable to write file: " + ex.getClass().getName() + ": " + ex.getMessage());
+            System.exit(1);
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
         }
     }
 }
