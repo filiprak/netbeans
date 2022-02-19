@@ -4,6 +4,7 @@ import org.apache.commons.cli.*;
 import org.json.JSONObject;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -142,10 +143,20 @@ public final class CliOptions {
         try {
             String outFilename = cmd.getOptionValue(Args.OUTPUT, getInputFilename());
 
-            writer = new BufferedWriter(new FileWriter(outFilename));
-            writer.write(formatted);
+            File file = new File(outFilename);
 
-            writer.close();
+            if (!file.isDirectory()) {
+                if (file.getParentFile().exists() || file.getParentFile().mkdirs()) {
+                    writer = new BufferedWriter(new FileWriter(outFilename));
+                    writer.write(formatted);
+
+                    writer.close();
+                } else {
+                    throw new IOException("Failed to create directiories");
+                }
+            } else {
+                throw new IOException("Output file is a directory");
+            }
 
         } catch (Exception ex) {
             System.out.println("Unable to write file: " + ex.getClass().getName() + ": " + ex.getMessage());
