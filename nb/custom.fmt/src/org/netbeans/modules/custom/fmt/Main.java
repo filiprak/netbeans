@@ -21,10 +21,13 @@ class Main {
                 CliOptions.saveReformattedFile(reformatted);
             }
 
-        } catch (FormatterException | IOException ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
             System.exit(1);
 
+        } catch (FormatterException ex) {
+            ex.printStackTrace();
+            System.exit(10);
         }
     }
 }
