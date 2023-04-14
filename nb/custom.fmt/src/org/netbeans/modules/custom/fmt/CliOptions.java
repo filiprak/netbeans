@@ -152,7 +152,7 @@ public final class CliOptions {
             File file = new File(outFilename);
 
             if (!file.isDirectory()) {
-                if (file.getParentFile().exists() || file.getParentFile().mkdirs()) {
+                if (file.getParentFile() == null || file.getParentFile().exists() || file.getParentFile().mkdirs()) {
                     writer = new BufferedWriter(new FileWriter(outFilename));
                     writer.write(formatted);
 
@@ -166,6 +166,7 @@ public final class CliOptions {
 
         } catch (Exception ex) {
             System.out.println("Unable to write file: " + ex.getClass().getName() + ": " + ex.getMessage());
+            ex.printStackTrace();
             System.exit(1);
         } finally {
             if (writer != null) {
