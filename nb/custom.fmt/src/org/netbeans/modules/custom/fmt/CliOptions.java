@@ -112,9 +112,15 @@ public final class CliOptions {
     }
 
     public static JSONObject getConfigJson() {
-        if (cmd.hasOption(Args.CONFIG)) {
-            return new JSONObject(cmd.getOptionValue(Args.CONFIG));
-        } else {
+        try {
+            if (cmd.hasOption(Args.CONFIG)) {
+                return new JSONObject(cmd.getOptionValue(Args.CONFIG));
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            System.out.println("Failed to parse json: " + ex.getClass().getName() + ": " + ex.getMessage());
+            System.exit(1);
             return null;
         }
     }

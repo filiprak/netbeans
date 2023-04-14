@@ -23,23 +23,23 @@ public class PHPCodeStylePreferences extends AbstractPreferences {
     }
 
     public void load() {
-        try {
-            JSONObject json = CliOptions.getConfigJson();
+        JSONObject json = CliOptions.getConfigJson();
 
-            if (json != null) {
-                prefs.clear();
+        if (json != null) {
+            prefs.clear();
 
-                Map<String, String> defaults = FmtOptions.getDefaults();
+            Map<String, String> defaults = FmtOptions.getDefaults();
 
-                defaults.forEach((name, value) -> {
+            defaults.forEach((name, value) -> {
+                try {
                     if (json.has(name)) {
                         prefs.put(name, json.get(name).toString());
                     }
-                });
-            }
-        } catch (JSONException ex) {
-            System.out.println("Warning: failed to parse json config, using default config instead");
-            ex.printStackTrace();
+                } catch (Exception ex) {
+                    System.out.println("Warning: failed to parse json config, using default config instead");
+                    ex.printStackTrace();
+                }
+            });
         }
     }
 
