@@ -15,7 +15,7 @@ for file_input in test/test[0-9][0-9].php; do
     java -jar build/bin/nb-fmt.jar $file_input -o test/out.test.php;
 
     if ! diff --color --strip-trailing-cr $file_expected test/out.test.php; then
-        echo -e "${RED}TEST FAILED!${CL}";
+        echo -e "${RED}TEST '$file_input' FAILED!${CL}";
         exit 5;
     fi
 done
