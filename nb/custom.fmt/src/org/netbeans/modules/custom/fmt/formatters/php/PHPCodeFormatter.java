@@ -11,6 +11,7 @@ import org.netbeans.modules.editor.indent.api.Reformat;
 import org.netbeans.modules.editor.indent.spi.Context;
 import org.netbeans.modules.editor.indent.spi.ExtraLock;
 import org.netbeans.modules.editor.indent.spi.ReformatTask;
+import org.netbeans.modules.editor.indent.spi.IndentTask;
 import org.netbeans.modules.php.editor.indent.PHPFormatter;
 import org.netbeans.modules.php.editor.lexer.PHPTokenId;
 import org.netbeans.modules.php.editor.parser.ASTPHP5Parser;
@@ -82,6 +83,7 @@ public class PHPCodeFormatter extends Formatter {
                     public ReformatTask createTask(Context context) {
                         return new ReformatTask() {
                             public void reformat() {
+                                System.out.println("reformating...");
                                 formatter.reformat(context, parseInfo);
                             }
 
@@ -92,7 +94,23 @@ public class PHPCodeFormatter extends Formatter {
                     }
                 };
 
+                IndentTask.Factory task2 = new IndentTask.Factory() {
+                    public IndentTask createTask(Context context) {
+                        return new IndentTask() {
+                            public void reindent() {
+                                System.out.println("indenting...");
+                                formatter.reindent(context);
+                            }
+
+                            public ExtraLock indentLock() {
+                                return null;
+                            }
+                        };
+                    }
+                };
+
                 lookupContent.add(task);
+                lookupContent.add(task2);
 
                 final Reformat fmt = Reformat.get(doc);
 
