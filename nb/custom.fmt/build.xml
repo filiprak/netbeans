@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="build" name="nb/custom.fmt">
+    <description>Builds, tests, and runs the project org.netbeans.modules.custom.fmt</description>
+    <import file="../../nbbuild/templates/projectized.xml"/>
+
+    <target name="build" depends="projectized.build">
+        <echo message="Building fmt jar file"/>
+        <jar destfile="build/bin/nb-fmt.jar" manifest="manifest.mf">
+
+            <zipgroupfileset dir="../../nbbuild/build/public-package-jars" includes="org-netbeans-libs-javacup.jar" />
+            <zipgroupfileset dir="external" includes="**/*.jar" />
+
+            <fileset dir="../../platform/openide.filesystems/build/classes"/>
+            <fileset dir="../../platform/openide.util/build/classes"/>
+            <fileset dir="../../platform/openide.util.lookup/build/classes"/>
+            <fileset dir="../../platform/openide.util.ui/build/classes"/>
+            <fileset dir="../../platform/openide.awt/build/classes"/>
+            <fileset dir="../../platform/openide.nodes/build/classes"/>
+            <fileset dir="../../platform/openide.loaders/build/classes"/>
+            <fileset dir="../../platform/editor.mimelookup/build/classes"/>
+            <fileset dir="../../ide/csl.api/build/classes"/>
+            <fileset dir="../../ide/csl.types/build/classes"/>
+            <fileset dir="../../ide/editor.lib/build/classes"/>
+            <fileset dir="../../ide/editor.lib2/build/classes"/>
+            <fileset dir="../../ide/editor.document/build/classes"/>
+            <fileset dir="../../ide/editor.util/build/classes"/>
+            <fileset dir="../../ide/editor.settings.lib/build/classes"/>
+            <fileset dir="../../ide/editor.indent/build/classes"/>
+            <fileset dir="../../ide/parsing.api/build/classes"/>
+            <fileset dir="../../ide/parsing.lucene/build/classes"/>
+            <fileset dir="../../ide/lexer/build/classes"/>
+            <fileset dir="../../ide/html.lexer/build/classes"/>
+            <fileset dir="../../ide/web.common/build/classes"/>
+            <fileset dir="../../php/php.editor/build/classes"/>
+            <fileset dir="../../php/php.api.editor/build/classes"/>
+            <fileset dir="../../php/php.api.phpmodule/build/classes"/>
+            <fileset dir="../../php/php.project/build/classes"/>
+            <fileset dir="../../php/php.api.annotation/build/classes"/>
+
+            <fileset dir="build/classes"/>
+
+        </jar>
+    </target>
+
+</project>
