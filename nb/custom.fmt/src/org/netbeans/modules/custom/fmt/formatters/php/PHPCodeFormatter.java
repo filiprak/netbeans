@@ -8,6 +8,7 @@ import org.netbeans.modules.custom.fmt.DefaultEnvironmentFactory;
 import org.netbeans.modules.custom.fmt.formatters.Formatter;
 import org.netbeans.modules.custom.fmt.formatters.FormatterException;
 import org.netbeans.modules.editor.indent.api.Reformat;
+import org.netbeans.modules.editor.indent.api.Indent;
 import org.netbeans.modules.editor.indent.spi.Context;
 import org.netbeans.modules.editor.indent.spi.ExtraLock;
 import org.netbeans.modules.editor.indent.spi.ReformatTask;
@@ -79,7 +80,7 @@ public class PHPCodeFormatter extends Formatter {
             if (!errorHandler.isCritical()) {
                 PHPParseResult parseInfo = new PHPParseResult(null, (Program) parsed.value);
 
-                ReformatTask.Factory task = new ReformatTask.Factory() {
+                ReformatTask.Factory task1 = new ReformatTask.Factory() {
                     public ReformatTask createTask(Context context) {
                         return new ReformatTask() {
                             public void reformat() {
@@ -94,24 +95,25 @@ public class PHPCodeFormatter extends Formatter {
                     }
                 };
 
-                IndentTask.Factory task2 = new IndentTask.Factory() {
-                    public IndentTask createTask(Context context) {
-                        return new IndentTask() {
-                            public void reindent() {
-                                System.out.println("indenting...");
-                                formatter.reindent(context);
-                            }
+                // IndentTask.Factory task2 = new IndentTask.Factory() {
+                //     public IndentTask createTask(Context context) {
+                //         return new IndentTask() {
+                //             public void reindent() {
+                //                 System.out.println("indenting...");
+                //                 formatter.reindent(context);
+                //             }
 
-                            public ExtraLock indentLock() {
-                                return null;
-                            }
-                        };
-                    }
-                };
+                //             public ExtraLock indentLock() {
+                //                 return null;
+                //             }
+                //         };
+                //     }
+                // };
 
-                lookupContent.add(task);
-                lookupContent.add(task2);
+                lookupContent.add(task1);
+                // lookupContent.add(task2);
 
+                // format
                 final Reformat fmt = Reformat.get(doc);
 
                 fmt.lock();
@@ -123,8 +125,23 @@ public class PHPCodeFormatter extends Formatter {
                     fmt.reformat(realStart, realEnd);
                 } finally {
                     fmt.unlock();
-                    lookupContent.remove(task);
+                    lookupContent.remove(task1);
                 }
+
+                // indent
+                // final Indent ind = Indent.get(doc);
+
+                // ind.lock();
+
+                // try {
+                //     int realStart = start > 0 ? Math.min(start, doc.getLength()) : 0;
+                //     int realEnd = end > 0 ? Math.max(realStart, Math.min(doc.getLength(), end)) : doc.getLength();
+
+                //     ind.reindent(realStart, realEnd);
+                // } finally {
+                //     ind.unlock();
+                //     lookupContent.remove(task2);
+                // }
 
                 return doc.getText(0, doc.getLength());
             } else {
