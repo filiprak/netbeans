@@ -7,6 +7,12 @@ CL='\033[0m'
 for file_input in test/test[0-9][0-9].php; do
     test_name=$(basename "$file_input" .php);
     file_expected="test/$test_name.formatted.php"
+
+    if [ "$1" ]; then
+        if [ "$test_name" != "$1" ]; then
+            continue
+        fi
+    fi
     
     echo "Testing: $file_input $filename";
 
