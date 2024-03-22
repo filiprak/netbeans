@@ -3,6 +3,11 @@ package org.netbeans.modules.custom.fmt;
 import org.apache.commons.cli.*;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.io.FileDescriptor;
+import java.io.OutputStreamWriter;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -10,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
 
 
 public final class CliOptions {
@@ -59,6 +65,13 @@ public final class CliOptions {
         options.addOption(outFile);
 
         CommandLineParser parser = new DefaultParser();
+
+        // @todo debug
+        // try {
+        //     System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out), true, "utf-8"));
+        // } catch (UnsupportedEncodingException e) {
+        //     throw new InternalError("VM does not support mandatory encoding UTF-8");
+        // }
 
         try {
             cmd = parser.parse(options, args);
@@ -132,7 +145,7 @@ public final class CliOptions {
 
                 detectedMime = Files.probeContentType(path);
 
-                return new String(Files.readAllBytes(path));
+                return new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
             } else {
                 throw new IOException("File name is empty");
             }
@@ -153,7 +166,7 @@ public final class CliOptions {
 
             if (!file.isDirectory()) {
                 if (file.getParentFile() == null || file.getParentFile().exists() || file.getParentFile().mkdirs()) {
-                    writer = new BufferedWriter(new FileWriter(outFilename));
+                    writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFilename), StandardCharsets.UTF_8));
                     writer.write(formatted);
 
                     writer.close();
